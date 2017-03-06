@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .btn-box,ul{
+            margin: 20px 0 20px 20px;
+            font-size: 0;
+        }
+        ul li{
+            list-style: none;
+            display: inline-block;
+            padding: 20px;
+            height: 20px;
+            background: #ccc;
+            color: #fff;
+            text-align: center;
+            margin: 0 10px;
+            font-size: 14px;
+        }
+        input[type="button"]{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="box" class="btn-box">
+        <input type="text"/>
+        <input type="button" value="左侧入"/>
+        <input type="button" value="右侧入"/>
+        <input type="button" value="左侧出"/>
+        <input type="button" value="右侧出"/>
+    </div>
+    <ul id="list">
+        <li>10</li>
+        <li>3</li>
+        <li>7</li>
+        <li>12</li>
+        <li>11</li>
+        <li>30</li>
+    </ul>
+    <script>
+      /**
+       *    有一个input输入框，以及4个操作按钮
+       *    点击"左侧入"，将input中输入的数字从左侧插入队列中；
+       *    点击"右侧入"，将input中输入的数字从右侧插入队列中；
+       *    点击"左侧出"，读取并删除队列左侧第一个元素，并弹窗显示元素中数值；
+       *    点击"右侧出"，读取并删除队列又侧第一个元素，并弹窗显示元素中数值；
+       *    点击队列中任何一个元素，则该元素会被从队列中删除
+       *    需要考虑数字输入的合法性
+       */
+
+        //获取列表
+        var list = document.getElementById('list');
+
+        var box = document.getElementById('box');
+
+
+
+        //获取左侧入
+        var leftDownInput = box.children[1];
+        leftDownInput.onclick = function () {
+
+          //获取输入框
+          var text = box.children[0].value;
+          if(text !== "" && text.replace(/[0~9]/) && !isNaN(text)){
+            var li = document.createElement('li');
+            var liText = document.createTextNode(text);
+            li.appendChild(liText);
+            list.insertBefore(li,list.childNodes[0])
+          }else{
+            alert("输入非法字符")
+          }
+
+        
+        };
+
+        //获取右侧入
+        var rightDownInput = box.children[2];
+        rightDownInput.onclick = function(){
+
+          //获取输入框
+          var text = box.children[0].value;
+          if(text !== "" && text.replace(/[0~9]/) && !isNaN(text)){
+            var li = document.createElement('li');
+            var liText = document.createTextNode(text);
+            li.appendChild(liText);
+            list.appendChild(li)
+          }else{
+            alert("输入非法字符")
+          }
+        }
+
+        //获取左侧出
+        var leftUpInput = box.children[3];
+        leftUpInput.onclick = function(){
+          alert("删除了" + list.children[0].innerHTML)
+          list.removeChild(list.children[0]);
+        }
+
+        //获取右侧出
+        var rightUpInput = box.children[4];
+        rightUpInput.onclick = function(){
+          var num = list.children.length-1;
+
+          list.removeChild(list.children[num])
+        }
+        
+        //循环删除
+
+        for (var i = 0; i < list.children.length; i++) {
+          list.children[i].onclick = function(){
+            list.removeChild(this)
+          }
+        }
+    </script>
+</body>
+</html>
