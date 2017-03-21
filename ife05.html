@@ -2,9 +2,166 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>冒泡排序</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .btn-box,ul{
+            margin: 20px 0 20px 20px;
+            font-size: 0;
+        }
+        ul{
+            display: inline-block;
+        }
+        ul li{
+            list-style: none;
+            display: inline-block;
+            padding: 5px;
+            height: 20px;
+            background: #f70606;
+            color: #fff;
+            text-align: center;
+            margin: 0 5px;
+            font-size: 14px;
+            vertical-align: bottom;
+        }
+        input[type="button"]{
+            cursor: pointer;
+        }
+        input{
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
-$END$
+<div id="box" class="btn-box">
+    <input type="text" id="text"/>
+    <input class="btn" data-btn="leftIn" type="button" value="左侧入"/>
+    <input class="btn" data-btn="rightIn" type="button" value="右侧入"/>
+    <input class="btn" data-btn="leftUp" type="button" value="左侧出"/>
+    <input class="btn" data-btn="rightUp" type="button" value="右侧出"/>
+    <input id="just-sort" data-btn="just-sort" type="button" value="正-冒泡排序"/>
+    <input id="inverted-sort" data-btn="inverted-sort" type="button" value="倒-冒泡排序" />
+</div>
+<ul id="list">
+
+</ul>
+<script>
+  /**
+   *
+   * 1.限制输入的数字在10-100
+   * 2.队列元素数量最多限制为60个，当超过60个时，添加元素时alert出提示
+   * 3.队列展现方式变化，直接用高度表示数字大小
+   * 4.实现一个简单的排序功能，如冒泡排序，用可视化的方法表达出来
+   */
+  var arr = [100,12,13,14,15,32,44,78];
+  var main = function () {
+    var list = document.getElementsByClassName('btn');
+    for(var i = 0;i<list.length;i++){
+      list[i].addEventListener('click',click_Event);
+    }
+    document.getElementById('list').addEventListener('click',del);
+    showArray();
+  };
+
+  var click_Event = function () {
+    var data = this.getAttribute('data-btn');
+    console.log(data);
+    var ele = document.getElementById('text').value.trim();
+    if(ele.match(/^\d+$/) && arr.length <= 59){
+      switch (data){
+        case 'leftIn':
+          arr.unshift(ele);
+          break;
+        case 'rightIn':
+          arr.push(ele);
+          break;
+        case 'leftUp':
+          arr.shift();
+          break;
+        case 'rightUp':
+          arr.pop();
+          break;
+        default:
+          break;
+      }
+    }else{
+      alert("请输入数字或者已经超过60个")
+    }
+    showArray()
+  };
+
+  function showArray() {
+    var tpl = '';
+    arr.forEach(function (ele,index) {
+      tpl += "<li style='height: "+ ele +"px' data-index='"+index+"' data-ele='"+ ele +"'>" + ele + "</li>"
+    });
+    document.getElementById('list').innerHTML = tpl;
+  }
+        
+  function del(e) {
+    var e = e || window.event;
+    var t = e.target;
+    var ele_ind = t.getAttribute('data-index');
+    arr.splice(ele_ind,1);
+    showArray()
+  }
+  main();
+
+  //冒泡排序
+    var justSort = document.getElementById('just-sort'),
+        inverteSort = document.getElementById('inverted-sort');
+
+
+        justSort.onclick = function(){
+          justSort_maopao(arr)
+          var s = justSort_maopao(arr);
+          console.log(justSort_maopao(arr));
+          showArray()
+        }
+
+        inverteSort.onclick = function(){
+          inverte_maopao(arr)
+          var s = inverte_maopao(arr);
+          console.log(inverte_maopao(arr));
+          showArray()
+        }
+
+
+      //正序-冒泡排序
+      var justSort_maopao = function(sortData){
+        var temp;
+        for(var i = 0;i<sortData.length;i++){
+          for(var j = 0;j<sortData.length-i-1;j++){
+
+            if(sortData[j] > sortData[j+1]){
+              temp=sortData[j];
+              sortData[j]=sortData[j+1];
+              sortData[j+1]=temp
+            }
+          }
+        }
+        return sortData
+      };
+
+      //倒序-冒泡排序
+      var inverte_maopao = function(sortData){
+        var temp;
+        for(var i = 0;i<sortData.length;i++){
+          for(var j = 0;j<sortData.length-i-1;j++){
+
+            if(sortData[j] > sortData[j+1]){
+              temp=sortData[j];
+              sortData[j]=sortData[j+1];
+              sortData[j+1]=temp
+            }
+          }
+        }
+        return sortData
+      };
+    
+</script>
 </body>
 </html>
