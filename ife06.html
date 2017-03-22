@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>任务六</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .btn-box,ul{
+            margin: 20px 0 20px 20px;
+            font-size: 0;
+        }
+        ul{
+            display: inline-block;
+        }
+        ul li{
+            list-style: none;
+            display: inline-block;
+            padding: 5px;
+            height: 20px;
+            background: #f70606;
+            color: #fff;
+            text-align: center;
+            margin: 0 5px;
+            font-size: 14px;
+            vertical-align: bottom;
+        }
+        input[type="button"]{
+            cursor: pointer;
+        }
+        input{
+            margin-right: 5px;
+        }
+        .clor{
+            background: #0b980f;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+<div id="box" class="btn-box">
+    <textarea rows="2" cols="20" id="text"></textarea>
+    <input class="btn" data-btn="leftIn" type="button" value="左侧入"/>
+    <input class="btn" data-btn="rightIn" type="button" value="右侧入"/>
+    <input class="btn" data-btn="leftUp" type="button" value="左侧出"/>
+    <input class="btn" data-btn="rightUp" type="button" value="右侧出"/>
+    <input class="btn" id="just-sort" data-btn="just-sort" type="button" value="正-冒泡排序"/>
+    <input id="search"  type="text" placeholder="模糊搜索" />
+    <input id="btn-search" type="button" value="点击搜索" />
+</div>
+<ul id="list">
+
+</ul>
+<script>
+  /**
+   *
+   * 1.基于任务四进行升级
+   * 2.将新元素输入框从input改为textarea
+   * 3.允许一次批量输入多个内容，格式可以为数字、中文、英文等，可以通过用回车，逗号（全角半角均可），顿号，空格（全角半
+   * 角、Tab等均可）等符号作为不同内容的间隔
+   * 4.增加一个查询文本输入框，和一个查询按钮，当点击查询时，将查询词在各个元素内容中做模糊匹配，将匹配到的内容进行特殊
+   * 标识，如文字颜色等。举例，内容中有abcd，查询词为ab或bc，则该内容需要标识
+   */
+  var arr = [100,12,13,14,15,32,44,78];
+  var main = function () {
+    var list = document.getElementsByClassName('btn');
+    for(var i = 0;i<list.length;i++){
+      list[i].addEventListener('click',click_Event);
+    }
+    document.getElementById('list').addEventListener('click',del);
+    showArray();
+  };
+
+  var click_Event = function () {
+    var data = this.getAttribute('data-btn');
+    console.log(data);
+    var ele = document.getElementById('text').value.trim();
+
+    //正则匹配输入是否符合规范
+    var re = /[\s\n\r\，\,]/;
+    var num = ele.split(re);
+    // if(ele.match(/^\d+$/) && arr.length <= 59){
+    if(arr.length <= 59){
+      switch (data){
+        case 'leftIn':
+          // arr.unshift(num);
+          for(var i =0;i<num.length;i++){
+            arr.unshift(num[i]);
+          }
+          break;
+        case 'rightIn':
+          // arr.push(ele);
+          for(var i =0;i<num.length;i++){
+            arr.push(num[i]);
+          }
+          break;
+        case 'leftUp':
+          arr.shift();
+          break;
+        case 'rightUp':
+          arr.pop();
+          break;
+        //冒泡排序
+        case 'just-sort':
+          justSort_maopao(arr);
+          break;
+        default:
+          break;
+      }
+    }else{
+      alert("输入已经超过60个")
+    }
+    showArray()
+  };
+
+  function showArray() {
+    var tpl = '';
+    arr.forEach(function (ele,index) {
+      tpl += "<li style='height: "+ ele +"px' data-index='"+index+"' data-ele='"+ ele +"'>" + ele + "</li>"
+    });
+    document.getElementById('list').innerHTML = tpl;
+  }
+        
+  function del(e) {
+    var e = e || window.event;
+    var t = e.target;
+    var ele_ind = t.getAttribute('data-index');
+    arr.splice(ele_ind,1);
+    showArray()
+  }
+  main();
+
+  //正序-冒泡排序
+  var justSort_maopao = function(sortData){
+    var temp;
+    for(var i = 0;i<sortData.length;i++){
+      for(var j = 0;j<sortData.length-i-1;j++){
+        if(sortData[j] > sortData[j+1]){
+          temp=sortData[j];
+          sortData[j]=sortData[j+1];
+          sortData[j+1]=temp
+        }
+      }
+    }
+    return sortData
+  };
+
+//模糊搜索
+  var search_btn = document.getElementById('btn-search');
+  var lis = list.getElementsByTagName('li');
+
+  var search_fn = function () {
+    var search_text = document.getElementById('search').value.trim();
+    for(var i =0;i<lis.length;i++){
+      if(lis[i].innerHTML.indexOf(search_text) !== -1){
+        lis[i].className = 'clor';
+      }
+    }
+  };
+    search_btn.addEventListener('click',search_fn)
+</script>
+</body>
+</html>
