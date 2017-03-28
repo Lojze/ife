@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html leng="en">
+<head>
+	<meta charset="utf-8">
+	<title>冒泡重写</title>
+	<style type="text/css">
+		#sort{
+			display: flex;
+			height: 505px;
+			align-items: flex-end;
+		}
+		#sort div{
+			margin: 3px;
+			width: 12px;
+			height: 0;
+			background: #ccc
+		}
+	</style>
+</head>
+<body>
+	<div class="ctrl">
+		<button id="rand">随机生成</button>
+		<button id="start">开始排序</button>
+	</div>
+	<div id="sort"></div>
+
+	<script type="text/javascript">
+		var array = [],
+		sort = document.getElementById('sort'),
+		start = document.getElementById('start');
+
+		var domUtil ={
+			CreateNum : function(value){
+				var el = document.createElement('div');
+				el.style.height = value * 4 +'px';
+				return el;
+			},
+
+			rightIn : function(value){
+				var div = this.CreateNum(value);
+				array.push(value);
+				sort.appendChild(div);
+			},
+
+			randNum : function(){
+				sort.innerHTML = null;
+				array.length = 0;
+				for(var i =0;i<50;i++){
+					domUtil.rightIn(parseInt(Math.random() * 91 +10))
+				}
+			},
+
+			//这样也是可以获取到的
+			one :function(num){
+				console.log(array)
+			}
+		};
+
+		function BubbleSort(el){
+			var len = array.length,
+			div = el,
+			i = 0,
+			j = 0,
+			temp,
+			clear = null;
+
+			//开启定时器设置15s操作一次
+			clear = setInterval(run,15);
+
+			function run(){
+
+				//如果数组大于0	
+				if(i < len){
+
+					//如果数组- i -1 大于0。执行
+					if( j < len - i -1){
+
+
+						if(array[j] > array[j+1]){
+							temp = array[j];
+							array[j] = array[j+1];
+							array[j+1] = temp;
+							div[j].style.height = array[j] * 4 + 'px';
+							div[j+1].style.height = array[j+1] * 4 + 'px';
+
+						}
+						j++;
+						return
+					}else{
+						j = 0;
+					}
+				}else{
+					clearInterval(clear)
+				}
+			}
+		};
+
+		rand.onclick = domUtil.randNum;
+
+		start.onclick = function(){
+			var div = document.getElementById('sort').getElementsByTagName('div');
+			BubbleSort(div);
+			//domUtil.one(div)
+		}
+	</script>
+</body>
+</html>

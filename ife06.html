@@ -18,7 +18,6 @@
         ul li{
             list-style: none;
             display: inline-block;
-            padding: 5px;
             height: 20px;
             background: #f70606;
             color: #fff;
@@ -46,6 +45,7 @@
     <input class="btn" data-btn="rightIn" type="button" value="右侧入"/>
     <input class="btn" data-btn="leftUp" type="button" value="左侧出"/>
     <input class="btn" data-btn="rightUp" type="button" value="右侧出"/>
+    <input class="btn" data-btn="sort-s" type="button" value="随机排序"/>
     <input class="btn" id="just-sort" data-btn="just-sort" type="button" value="正-冒泡排序"/>
     <input id="search"  type="text" placeholder="模糊搜索" />
     <input id="btn-search" type="button" value="点击搜索" />
@@ -64,12 +64,14 @@
    * 标识，如文字颜色等。举例，内容中有abcd，查询词为ab或bc，则该内容需要标识
    */
   var arr = [100,12,13,14,15,32,44,78];
+  var lin = document.getElementById('list');
   var main = function () {
     var list = document.getElementsByClassName('btn');
     for(var i = 0;i<list.length;i++){
       list[i].addEventListener('click',click_Event);
     }
-    document.getElementById('list').addEventListener('click',del);
+
+    lin.addEventListener('click',del);
     showArray();
   };
 
@@ -102,9 +104,9 @@
         case 'rightUp':
           arr.pop();
           break;
-        //冒泡排序
-        case 'just-sort':
-          justSort_maopao(arr);
+        // 随机排序
+        case 'sort-s':
+          domUtil.randNum();
           break;
         default:
           break;
@@ -132,19 +134,67 @@
   }
   main();
 
-  //正序-冒泡排序
-  var justSort_maopao = function(sortData){
-    var temp;
-    for(var i = 0;i<sortData.length;i++){
-      for(var j = 0;j<sortData.length-i-1;j++){
-        if(sortData[j] > sortData[j+1]){
-          temp=sortData[j];
-          sortData[j]=sortData[j+1];
-          sortData[j+1]=temp
-        }
+  //随机排序
+  var domUtil = {
+    CreateNum : function (value) {
+      var el = document.createElement('li');
+      el.style.height = value + 'px';
+      return el
+    },
+
+    right:function (value) {
+      var li = this.CreateNum(value);
+      arr.push(value);
+      lin.appendChild(li)
+    },
+
+    randNum : function () {
+      lin.innerHTML = null;
+      arr.length = 0;
+      for(var i = 0;i<50;i++){
+        domUtil.right(parseInt(Math.random() * 91 +10))
       }
     }
-    return sortData
+  };
+
+  //正序-冒泡排序
+  var justSort_maopao = function(sortData){
+    var len = arr.length,
+      div = sortData,
+      i = 0,
+      j = 0,
+      temp,
+      clear = null;
+
+      //开启定时器设置15s操作一次
+      clear = setInterval(run,15);
+
+      function run(){
+
+        //如果数组大于0 
+        if(i < len){
+
+          //如果数组- i -1 大于0。执行
+          if( j < len - i -1){
+
+
+            if(arr[j] > arr[j+1]){
+              temp = arr[j];
+              arr[j] = arr[j+1];
+              arr[j+1] = temp;
+              div[j].style.height = arr[j] + 'px';
+              div[j+1].style.height = arr[j+1] + 'px';
+
+            }
+            j++;
+            return
+          }else{
+            j = 0;
+          }
+        }else{
+          clearInterval(clear)
+        }
+      }
   };
 
 //模糊搜索
@@ -159,7 +209,14 @@
       }
     }
   };
-    search_btn.addEventListener('click',search_fn)
+    search_btn.addEventListener('click',search_fn);
+
+    //冒泡点击
+    var btns = document.getElementById('just-sort');
+    btns.onclick = function () {
+      var ls = lin.getElementsByTagName('li');
+      justSort_maopao(ls)
+    }
 </script>
 </body>
 </html>
