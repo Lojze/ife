@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript和树</title>
+    <style type="text/css">
+    	#box{
+    		display: flex;
+		    padding: 20px;
+		    width: 1000px;
+		    height: 300px;
+		    border: 1px solid #000;
+		    margin: 100px auto;
+		    margin-bottom: 10px;
+		    justify-content: space-between;
+    	}
+    	.box-1{
+    		display: flex;
+		    padding: 20px;
+		    width: 450px;
+		    height: 260px;
+		    border: 1px solid red;
+		    justify-content: space-between;
+    	}
+    	.box-2{
+    		display: flex;
+		    padding: 20px;
+		    width: 170px;
+		    height: 220px;
+		    border: 1px solid green;
+		    justify-content: space-between;
+    	}
+    	.box-3{
+    		display: flex;
+		    padding: 20px;
+		    width: 35px;
+		    height: 180px;
+		    border: 1px solid blue;
+		    justify-content: space-between;
+    	}
+    </style>
+</head>
+<body>
+	<div id="box">
+		<div class="box-1">
+			<div class="box-2">
+				<div class="box-3"></div>
+				<div class="box-3"></div>
+			</div>
+			<div class="box-2">
+				<div class="box-3"></div>
+				<div class="box-3"></div>
+			</div>
+		</div>
+		<div class="box-1">
+			<div class="box-2">
+				<div class="box-3"></div>
+				<div class="box-3"></div>
+			</div>
+			<div class="box-2">
+				<div class="box-3"></div>
+				<div class="box-3"></div>
+			</div>
+		</div>
+	</div>
+	<input type="button" value="前序">
+	<input type="button" value="中序">
+	<input type="button" value="后序">
+	<script>
+	var btn = document.getElementsByTagName('input'),
+	btn01 = btn[0],
+	btn02 = btn[1],
+	btn03 = btn[2],
+	tree = document.getElementById('box'),
+	divList = [],
+	timer = null;
+
+	//初始化
+	function reset(){
+		divList = [];
+		clearInterval(timer);
+		var divs = document.getElementsByTagName('div');
+		for(var i = 0;i<divs.length;i++){
+			divs[i].style.backgroundColor = '#fff'
+		}
+	}
+
+	//变化颜色
+	function changeColor(){
+		var i = 0;
+		divList[i].style.backgroundColor = 'blue';
+		timer = setInterval(function(argument){
+			i++;
+			if(i< divList.length){
+				divList[i-1].style.backgroundColor = '#fff';
+				divList[i].style.backgroundColor = 'blue'
+			}else{
+				clearInterval(timer);
+				divList[divList.length-1].style.backgroundColor = '#fff'
+			}
+		},500)
+
+	}
+
+	//前序遍历
+	function preOrder(node) {
+		if(!(node == null)){
+			divList.push(node);
+			preOrder(node.firstElementChild);
+			preOrder(node.lastElementChild)
+		}
+	}
+
+	//点击事件
+	btn01.onclick = function () {
+		reset();
+		preOrder(tree);
+		changeColor();
+	}
+	</script>
+</body>
+</html>
