@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0
+		}
+		#input01,#input02,#input03{
+			width: 1000px;
+			margin: 30px auto 0;
+		}
+		code{
+			color: #f90707;
+			font-size: 16px;
+		}
+		input{
+			width: 600px;
+			border: 1px solid #868282;
+			border-radius: 4px;
+			height: 35px;
+			font-size: 16px;
+			text-indent: 5px;
+		}
+		input:focus{
+			border-color: #1fd4e6
+		}
+		label{
+			display: inline-block;
+			width: 80px;
+			text-align: right;
+		}
+		.Obtain{
+			margin-bottom: 10px;
+		}
+		button{
+			width: 85px;
+			height: 35px;
+			background: #6d91e0;
+			text-align: center;
+			line-height: 35px;
+			font-size: 16px;
+			border: 1px solid #0852f9;
+			color: #fff;
+			float: right;
+			margin-right: 315px;
+		}
+		.Prompt{
+			color: #ccc;
+			margin-left: 100px;
+		}
+		.warn{
+			border: 1px solid #f50303
+		}
+		.warn_text{
+			color: #f50303;
+			margin-left: 100px;
+		}
+		.green{
+			border: 1px solid #109c15
+		}
+		.green_text{
+			color: #109c15;
+			margin-left: 100px;
+		}
+	</style>
+</head>
+<body>
+	<div id="input01">
+	<code>表单获取焦点时，出现规则提示</code>
+		<div class="Obtain">
+			<label for="">名称</label>
+			<input data-rule="name" type="text">
+		</div>
+		<div class="Obtain">
+			<label for="">密码</label>
+			<input data-rule="passdWorld" type="password">
+		</div>
+		<div class="Obtain">
+			<label for="">密码确认</label>
+			<input data-rule="passdWorlds" type="password">
+		</div>
+		<div class="Obtain">
+			<label for="">邮箱</label>
+			<input data-rule="gmail" type="text">
+		</div>
+		<div class="Obtain">
+			<label for="">手机</label>
+			<input data-rule="tel" type="text">
+		</div>
+		<div class="Obtain">
+			<button>提交</button>
+		</div>
+	</div>
+	<div id="input02">
+		<code>表单失去焦点时，显示验证结果</code>
+		<div class="Obtain">
+			<label for="">名称</label>
+			<input data-rule="name" type="text">
+		</div>
+		<div class="Obtain">
+			<label for="">密码</label>
+			<input data-rule="passdWorld" type="password">
+		</div>
+		<div class="Obtain">
+			<label for="">密码确认</label>
+			<input data-rule="passdWorlds" type="password">
+		</div>
+		<div class="Obtain">
+			<label for="">邮箱</label>
+			<input data-rule="gmail" type="text">
+		</div>
+		<div class="Obtain">
+			<label for="">手机</label>
+			<input data-rule="tel" type="text">
+		</div>
+		<div class="Obtain">
+			<button>提交</button>
+		</div>
+	</div>
+	<div id="input03">
+		<code>点击提交按钮，全局校验，并弹窗显示校验结果</code>
+		<div class="Obtain">
+			<label for="">名称</label>
+			<input data-rule="name" type="text">
+		</div>
+		<div class="Obtain">
+			<label for="">密码</label>
+			<input data-rule="passdWorld" type="password">
+		</div>
+		<div class="Obtain">
+			<label for="">密码确认</label>
+			<input data-rule="passdWorlds" type="password">
+		</div>
+		<div class="Obtain">
+			<label for="">邮箱</label>
+			<input data-rule="gmail" type="text">
+		</div>
+		<div class="Obtain">
+			<label for="">手机</label>
+			<input data-rule="tel" type="text">
+		</div>
+		<div class="Obtain">
+			<button id="btn">提交</button>
+		</div>
+	</div>
+	<script>
+
+		//长度验证
+		var lenReg = /^.{4,16}/g;
+
+		//汉字、中文符号验证
+		var chineseReg = /[\u4E00-\uFA29]|[\uE7C7-\uE7F3]/g;
+			
+		//去除字符串开头和结尾的空格
+        var trimReg = /^\s*|\s*$/g;
+
+        //密码验证规则
+        var pas = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,10}$/;
+
+        //邮箱验证
+        var gamil = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+
+        //正则手机号
+        var tel = /^[1][3-8]([0-9]{9})$/;
+
+		//获取id
+		var id= {
+			//获取表单出现规则
+			focus:function(id,event){
+				var ids = document.getElementById(id);
+				var inps = ids.getElementsByTagName('input');
+				for(var i = 0;i<inps.length;i++){
+					if(event === 'focus'){
+						inps[i].addEventListener(event,inputone.rule);
+					}else if(event === 'blur'){
+						inps[i].addEventListener(event,inputone.blurs);
+					}else{
+						return
+					}
+				
+					
+				}
+			}
+		}
+		//第一个表单
+		var inputone = {
+
+			//获取规则
+			rule:function(){
+				var data = this.getAttribute('data-rule');
+
+				//获取当前的text
+				var text = this.value;
+				var _this = this;
+
+				switch (data){
+					case 'name':
+						fous(_this,'必填,长度为4~16个字符','Prompt');
+						break;
+					case 'passdWorld':
+						fous(_this,'密码必须要有数字和字母','Prompt');
+						break;
+					case 'passdWorlds':
+						fous(_this,'请重复密码','Prompt');
+						break;
+					case 'gmail':
+						fous(_this,'输入邮箱','Prompt');
+						break;
+					case 'tel':
+						fous(_this,'输入手机号','Prompt');
+						break;
+					default:
+						break;
+				}
+			},
+
+			//失去焦点规则
+			blurs:function(){
+				var data = this.getAttribute('data-rule');
+				//获取当前的text
+				var text = this.value;
+				var _this = this;
+
+				switch (data){
+					case 'name':
+						inputone.name(text,_this);
+						break;
+					case 'passdWorld':
+						inputone.passdWorld(text,_this);
+						
+						break;
+					case 'passdWorlds':
+						inputone.passdWorlds(text,_this);
+						
+						break;
+					case 'gmail':
+						inputone.gmail(text,_this);
+						
+						break;
+					case 'tel':
+						inputone.tel(text,_this);
+						
+						break;
+					default:
+						break;
+				}
+			},
+
+			//验证名称
+			name:function(text,_this){
+
+				var newStr = text.replace(trimReg, '').replace(chineseReg, '**');
+				//判断规则
+				if(!lenReg.test(newStr)){
+					//判断事件
+					onevent(_this,'姓名不能为空,且长度是4~16个字符');
+				}else{
+					SuccOnevent(_this,'输入正确')
+				}
+
+			},
+			//验证密码
+			passdWorld:function(text,_this){
+				if(text.match(pas)){
+					sessionStorage.setItem("key",text);
+					SuccOnevent(_this,'输入正确');
+				}else{
+					onevent(_this,'输入密码错误');
+				}
+			},
+			//验证密码是否一致
+			passdWorlds:function(text,_this){
+				var value = sessionStorage.getItem("key")
+				if(text === value){
+					SuccOnevent(_this,'输入正确');
+				}else{
+					onevent(_this,'密码不同');
+				}
+				
+			},
+			//验证邮箱
+			gmail:function(text,_this){
+				if(text.match(gamil)){
+					SuccOnevent(_this,'邮箱验证正确');
+				}else{
+					//判断事件
+					onevent(_this,'输入邮箱错误');
+				}
+			
+			},
+			//验证手机
+			tel:function(text,_this){
+				if(text.match(tel)){
+					SuccOnevent(_this,'输入手机正确');
+				}
+				//判断事件
+				onevent(_this,'手机号码输入错误');
+			},
+
+			//全局校验
+			
+		};
+
+
+		//获取焦点显示结果
+		function fous(_this,value,cls){
+			var div = document.createElement("div");
+			div.innerHTML = value;
+			div.setAttribute('class',cls);
+			var parentDiv	 = _this.parentNode;
+			parentDiv.insertBefore(div,_this.nextSibling);
+
+			var parent = _this.parentNode.children;
+				for(var i=0;i<parent.length;i++){
+					if(parent[i].className === 'warn_text' || parent[i].className === 'green_text'){
+						_this.parentNode.removeChild(parent[i])
+					}else{
+						//blur(_this,'ceshi')
+					}
+				}
+		};
+
+		//失去焦点显示结果
+		function blur(_this,value){
+			var text = _this.nextSibling;
+			_this.parentNode.removeChild(text);
+			_this.setAttribute('class','warn');
+			
+			var div = document.createElement("div");
+			div.innerHTML = value;
+			div.setAttribute('class','warn_text');
+			var parentDiv = _this.parentNode;
+			parentDiv.insertBefore(div,_this.nextSibling);
+		};
+
+		//判断那种事件
+		function onevent(_this,value){
+			var parent = _this.parentNode.children;
+				for(var i=0;i<parent.length;i++){
+					if(parent[i].className === 'Prompt'){
+						_this.parentNode.removeChild(parent[i])
+					}else{
+						blur(_this,value)
+					}
+				}
+		}
+
+		//输入成功事件
+		function Success(_this,value){
+			var text = _this.nextSibling;
+			_this.parentNode.removeChild(text);
+			_this.setAttribute('class','green');
+			
+			var div = document.createElement("div");
+			div.innerHTML = value;
+			div.setAttribute('class','green_text');
+			var parentDiv = _this.parentNode;
+			parentDiv.insertBefore(div,_this.nextSibling);
+		};
+
+		//成功判断
+		function SuccOnevent(_this,value){
+			var parent = _this.parentNode.children;
+				for(var i=0;i<parent.length;i++){
+					if(parent[i].className === 'Prompt'){
+						_this.parentNode.removeChild(parent[i])
+					}else{
+						Success(_this,value)
+					}
+				}
+		}
+
+		//第一个验证
+		id.focus('input01','focus');
+
+		//第二个验证
+		id.focus('input02','focus');
+		id.focus('input02','blur');
+
+		//第三个验证
+		var btn = document.getElementById('btn'),
+			box = document.getElementById('input03'),
+			inputs = box.getElementsByTagName('input'),
+			arrays = null;
+
+		function btnBox(){
+			for(var i = 0;i<inputs.length;i++){
+				arrays = inputs[i].getAttribute('data-rule');
+				var text = inputs[i].value;
+				var _this = inputs[i];
+
+				switch (arrays){
+					case 'name':
+						btn_fn.name(text,_this);
+						break;
+					case 'passdWorld':
+						btn_fn.passdWorld(text,_this);
+						
+						break;
+					case 'passdWorlds':
+						btn_fn.passdWorlds(text,_this);
+						
+						break;
+					case 'gmail':
+						btn_fn.gmail(text,_this);
+						
+						break;
+					case 'tel':
+						btn_fn.tel(text,_this);
+						
+						break;
+					default:
+					alert('没有找到')
+						break;
+				}
+			}
+		}
+		
+
+		var btn_fn = {
+
+			//验证名称
+			name:function(text,_this){
+				console.log(text.length)
+				var newStr = text.replace(trimReg, '').replace(chineseReg, '**');
+				//判断规则
+				if(!lenReg.test(newStr)){
+					//判断事件
+					onevent(_this,'姓名不能为空,且长度是4~16个字符');
+				}else{
+					SuccOnevent(_this,'输入正确')
+				}
+
+			},
+			//验证密码
+			passdWorld:function(text,_this){
+				if(text.match(pas)){
+					sessionStorage.setItem("key",text);
+					SuccOnevent(_this,'输入正确');
+				}else{
+					onevent(_this,'输入密码错误');
+				}
+			},
+			//验证密码是否一致
+			passdWorlds:function(text,_this){
+				var value = sessionStorage.getItem("key")
+				if(text === value){
+					SuccOnevent(_this,'输入正确');
+				}else{
+					onevent(_this,'密码不同');
+				}
+				
+			},
+			//验证邮箱
+			gmail:function(text,_this){
+				if(text.match(gamil)){
+					SuccOnevent(_this,'邮箱验证正确');
+				}else{
+					//判断事件
+					onevent(_this,'输入邮箱错误');
+				}
+			
+			},
+			//验证手机
+			tel:function(text,_this){
+				if(text.match(tel)){
+					SuccOnevent(_this,'输入手机正确');
+				}
+				//判断事件
+				onevent(_this,'手机号码输入错误');
+			}
+				
+			
+		}
+
+		//btn.addEventListener('click',btn_fn.inputs(arrays));
+		btn.onclick = function(){
+			btnBox()
+		};
+
+	</script>
+</body>
+</html>
