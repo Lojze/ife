@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		#box{
+			width: 1000px;
+			margin: 50px auto 0;
+		}
+		.radio{
+			position: relative;
+			margin-bottom: 4px;
+		    padding-left: 25px;
+		    line-height: 25px;
+		    color: #0c4757;
+		    cursor: pointer;
+		    font-size: 13px;
+		}
+		.radio input{
+			position: absolute;
+    		left: -9999px;
+		}
+		.radio i{
+			position: absolute;
+			border-color: #ccc;
+			border-radius: 50%;
+			top: 0px;
+		    left: 0;
+		    display: block;
+		    width: 15px;
+		    height: 15px;
+		    outline: 0;
+		    border-width: 1px;
+		    border-style: solid;
+		    background: #fff;
+		}
+		.radio i:after{
+			content: '';
+		    top: 4px;
+		    left: 4px;
+		    width: 7px;
+		    height: 7px;
+		    border-radius: 50%;
+		    position: absolute;
+    		opacity: 0;
+		}
+		input:checked + i:after{
+			opacity: 1;
+			background-color: #fff;
+		}
+		input:checked + i{
+			border-color: #03a9f4;
+			background: #03a9f4;
+		}
+		.input{
+			margin-bottom: 30px;
+		}
+		.right{
+			margin-right: 30px;
+		}
+		.operation{
+			font-size: 13px;
+		}
+		.operation .Student{
+			margin-bottom: 20px;
+		}
+		.operation input,.operation select{
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			width: 200px;
+			height: 30px;
+			text-indent: 5px;
+		}
+	</style>
+</head>
+<body>
+	<div id="box">
+		<div class="input">
+			<label class="radio right">
+            	<input type="radio" data-input="school" name="radio" checked="checked">
+            	<i></i>
+            	在校学生
+            </label>
+            <label class="radio">
+            	<input type="radio" data-input="sociology" name="radio">
+            	<i></i>
+            	非在校学生
+            </label>
+		</div>
+		<div class="operation">
+			<!-- 在校学生 -->
+			<div class="Student" id="Student">
+				<label for="">
+				学校 
+				<select name="" id="school">
+					<option value="">北京</option>
+					<option value="">上海</option>
+				</select>
+				<select name="" id="school_name"></select>
+				</label>
+			</div>
+			
+			<!-- 非在校 -->
+			<div class="sociology" id="sociology" style="display: none;">
+				就业单位
+				<label for=""><input type="text"></label>
+			</div>
+		</div>
+	</div>
+	<script>
+
+		//创建数据
+		var data = [
+			"北京",
+				["北京理工大学","北京大学"],
+			"上海",
+				["上海大学","上海理工"],
+			"南京",
+				["南京大学","南京理工"]
+		]
+
+		//选择是否在校
+		var list = document.getElementsByClassName('input')[0];
+		var input = list.getElementsByTagName('input');
+
+		var sociology = document.getElementById('sociology');
+		var Student = document.getElementById('Student'); 
+		for(var i = 0;i<input.length;i++){
+			input[i].addEventListener('click',btn)
+		}
+		
+		var array = data.provinces;
+
+		function btn() {
+			var data = this.getAttribute('data-input');
+			
+			switch(data){
+				case 'school':
+					Student.style.display = 'block';
+					sociology.style.display = 'none';
+					break;
+				case 'sociology':
+					Student.style.display = 'none';
+					sociology.style.display = 'block'
+					break;
+				default:
+          			break;
+			}
+		}
+
+		var main = {
+			Student:function(){
+				var school = document.getElementById('school');
+				var school_name = document.getElementById('school_name');
+				var tpl = "";
+				var ele = "";
+				for(var i = 0;i<data.length;i++){
+
+					if(data[i].constructor !== Array){
+						tpl += '<option value="'+ i +'">' + data[i] + '</option>'
+					};
+				}
+				//初始化二级
+				var num = 1;
+
+				for(var j = 0;j<data[num].length;j++){
+					console.log(data)
+
+						ele += '<option>' + data[num][j] + '</option>'
+				}
+
+				school.innerHTML = tpl;
+				school_name.innerHTML = ele;
+				school.addEventListener('change',this.switch)
+			},
+			switch:function () {
+				var data_option = parseInt(this.value) + 1;
+				var second_level = data[data_option];
+				var school_name = document.getElementById('school_name');
+
+				var level = "";
+				for(var i = 0; i<second_level.length;i++){
+					//console.log(second_level[i])
+					level += '<option>' + second_level[i] + '</option>'
+				}
+				school_name.innerHTML =level
+			}
+		}
+		main.Student()
+	</script>
+</body>
+</html>
