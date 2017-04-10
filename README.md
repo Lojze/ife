@@ -6,4 +6,4 @@
 #### ui层
 
 *	[表单验证](https://lojze.github.io/ife/综合练习挑战/ife02.html)	https://lojze.github.io/ife/综合练习挑战/ife02.html
-*	[二级联动](https://lojze.github.io/ife/综合练习挑战/ife03.html)https://lojze.github.io/ife/综合练习挑战/if03.html
+*	[二级联动](https://lojze.github.io/ife/综合练习挑战/if03.html)https://lojze.github.io/ife/综合练习挑战/if03.html
