@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue早期源码学习</title>
+</head>
+<body>
+	<script>
+
+	//let app1 = new Observer({
+	//name/: 'youngwind',
+	//  age: 25
+	//});
+
+	// let app2 = new Observer({
+	//   university: 'bupt',
+	//   major: 'computer'
+	// });
+
+	// 要实现的结果如下：
+		//app1.data.name // 你访问了 name
+		//app.data.age = 100;  
+		// 你设置了 age，新的值为100
+		//app2.data.university // 你访问了 university
+		//app2.data.major = 'science'  // 你设置了 major，新的值为 science
+	
+	//构建观察者模式
+	function Observer(data) {
+		this.data = data;
+		this.walk(data);
+	}
+
+	let p = Observer.prototype;
+
+	p.walk = function(obj){
+		let val;
+		for(let key in obj){
+			if(obj.hasOwnProperty(key)){
+				val = obj[key];
+
+				if(typeof val === 'object'){
+					new Observer(val);
+				}
+
+				this.convert(key,val);
+			}
+		}
+	}
+
+	p.convert = function(key,val){
+		//返回所有的key
+		//console.log(key);
+		//返回所有的val
+		//console.log(val)
+	}
+
+	let data = {
+	    name:'youngwind',
+	    age:25
+	};
+	//let app1 = new Observer({
+	//name/: 'youngwind',
+	//  age: 25
+	//});
+
+	let app = new Observer(data);
+	</script>
+</body>
+</html>

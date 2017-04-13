@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>鼠标悬浮</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		#box{
+			width: 120px;
+			margin: 30px auto 0;
+			position: relative;
+		}
+		img{
+			display: block;
+			cursor: pointer;
+			
+		}
+		#box:hover img{
+			-webkit-filter: blur(5px);
+            -moz-filter: blur(5px);
+            -o-filter: blur(5px);
+            -ms-filter: blur(5px);
+            filter: blur(5px);
+		}
+		#box:hover .mask{
+			display: block;
+		}
+		.mask{
+			display: none;
+			position: absolute;
+			width: 120px;
+			height: 134px;
+			left: 0;
+			top:0;
+		}
+		.mask-box{
+			position: absolute;
+			width: 100px;
+			height: 124px;
+			top: 5px;
+			left: 10px;
+			border: 1px solid #fff;
+		}
+		.mask-box span{
+			display: block;
+			text-align: center;
+			margin-top: 20px;
+		}
+		.mask-text1{
+			background-image: -webkit-linear-gradient(left, #7e20e4, #20ad6c 25%, #5f4ebd 50%, #1d8467 75%, #0905f3);
+		        -webkit-text-fill-color: transparent;
+		        -webkit-background-clip: text;
+		        -webkit-background-size: 200% 100%;
+		        -webkit-animation: masked-animation 4s infinite linear;
+		}
+		@-webkit-keyframes masked-animation {
+		    0%  { background-position: 0 0;}
+		    100% { background-position: -100% 0;}
+		}
+		.mask-text2{
+			color: #4CAF50;
+			animation: start 1.5s infinite ease-in-out;
+	        -moz-animation: start 1.5s infinite ease-in-out;
+	        -webkit-animation: start 1.5s infinite ease-in-out;
+	        -o-animation: start 1.5s infinite ease-in-out;
+	        -ms-animation: start 1.5s infinite ease-in-out;
+		}
+		@-webkit-keyframes start {
+	        0% {
+		        color:#4CAF50;
+		    }    
+		    100% {
+		        color: #03A9F4;
+		    }
+	    }
+	    @-moz-keyframes start {
+	        0% {
+		        color:#4CAF50;
+		    }    
+		    100% {
+		        color: #03A9F4;
+		    }
+	    }
+	    @keyframes start {
+	        0% {
+		        color:#4CAF50;
+		    }    
+		    100% {
+		        color: #03A9F4;
+		    }
+	    }
+	</style>
+</head>
+<body>
+	<div id="box">
+		<img src="01.jpg" alt="">
+		<div class="mask">
+			<div class="mask-box">
+				<span class="mask-text1">欢迎参加</span>
+				<span class="mask-text2">点击参加</span>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
