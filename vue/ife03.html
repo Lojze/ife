@@ -2,100 +2,45 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>vue早期源码学习</title>
+	<title>动态数据绑定之监听对象变化</title>
 </head>
 <body>
-<code>
-	控制台显示：
-	要实现的结果如下：</br>
-	app1.data.name // 你访问了 name</br>
-	app1.data.age = 100;  // 你设置了 </br>age，新的值为100</br>
-	app2.data.university // 你访问了 university</br>
-	app2.data.major = 'science'  // 你设置了 </br>major，新的值为 science
-</code>
-	<script>
+	let app = new Observer({ </br>
+    name: 'liujianhuan',</br>
+    company: 'Qihoo 360',</br>
+    address: 'Chaoyang, Beijing'</br>
+})</br>
 
-	//let app1 = new Observer({
-	//name/: 'youngwind',
-	//  age: 25
-	//});
+//要实现的结果如下</br>
+app.data.name //你访问了name</br>
+app.data.company //你访问了company</br>
+app.data.address = 'Beijing' //你设置了address， 新的值为 Beijing</br>
 
-	// let app2 = new Observer({
-	//   university: 'bupt',
-	//   major: 'computer'
-	// });
-
-	// 要实现的结果如下：
-		//app1.data.name // 你访问了 name
-		//app.data.age = 100;  
-		// 你设置了 age，新的值为100
-		//app2.data.university // 你访问了 university
-		//app2.data.major = 'science'  // 你设置了 major，新的值为 science
-	
-	//构建观察者模式
+<script>
 	function Observer(data) {
 		this.data = data;
-		this.walk(data);
+		this.makeObserver(data);
 	}
 
-	let p = Observer.prototype;
-
-	p.walk = function(obj){
-		let val;
-		for(let key in obj){
-			if(obj.hasOwnProperty(key)){
-				val = obj[key];
-
-				if(typeof val === 'object'){
-					//console.log(val)
-					new Observer(val);
-					//this.convert(key,val)
-				}
-
-				this.convert(key,val);
-			}
-		}
-	}
-
-	p.convert = function(key,val){
-		//返回所有的key
-		//console.log(key);
-		//返回所有的val
-		//console.log(val)
-		Object.defineProperty(this.data,key,{
-
-			//当且仅当该属性的 enumerable 为 true 时，该属性才能够出现在对象的枚举属性中。默认为 false。
+	Observer.prototype.setterAndGetter = function (key, val) {
+		Object.defineProperty(this.data, key,{
 			enumerable:true,
-
-			//当且仅当该属性的 configurable 为 true 时，该属性描述符才能够被改变，也能够被删除。默认为 false。
 			configurable:true,
+			get:function(){
+				console.log('你访问了' + key);
+				return val;
+			},
+			set:function(newval){
+				console.log('你设置了' + key);
+				console.log('新的' + key + '=' + newval);
+				val = newval
+			}
 
-			//一个给属性提供 getter 的方法，如果没有 getter 则为 undefined。该方法返回值被用作属性值。默认为 undefined。
-			get: function () {
-	            console.log('你访问了' + key);
-	            return val
-        	},
-        	set: function (newVal) {
-	            console.log('你设置了' + key);
-	            console.log('新的' + key + ' = ' + newVal)
-	            if (newVal === val) return;
-	            val = newVal
-	        }
 		})
 	}
-
-	let data = {
-	    name:'youngwind',
-	    age:25,
-	    c:{
-	    	d:3,
-	    	e:4
-	    }
-	};
-	
-
-	var app = new Observer(data);
-
-	</script>
+	let app = new Observer({
+		company:'qihoo 360'
+	})
+</script>
 </body>
 </html>
